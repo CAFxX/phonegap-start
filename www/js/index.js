@@ -30,7 +30,7 @@ var app = {
   keyRoot            = 'bktrk.root',
   keySessionID       = 'bktrk.session',
   keyRecordCounter   = 'bktrk.records',
-  keyPrefixRecord    = 'bktrk.r', // bktrk.r00000000
+  keyPrefixRecord    = 'bktrk.r', // e.g: bktrk.r00000000
   keyLastCovGeo      = 'bktrk.lastCovGeo',
   keyLastCovNet      = 'bktrk.lastCovNet',
   
@@ -47,6 +47,10 @@ var app = {
   
   start: function() {
     document.addEventListener('deviceready', app.deviceReady, false);
+    app.initStorage();
+  },
+  
+  initStorage: function() {
     var ls = window.localStorage;
     if (ls.getItem(app.rootKey) === null) {
       ls.clear();
@@ -114,6 +118,62 @@ var app = {
     }
     ls.setItem(ID, record);
     ls.setItem(app.recordKeyCounter, records+1);
+  },
+  
+  /////////////////////////////////////////////////////////////////////////////
+  //                                                                         //
+  //                   D I S P L A Y   F U N C T I O N S                     //
+  //                                                                         //
+  /////////////////////////////////////////////////////////////////////////////
+  
+  dispWatch: null,
+  
+  display: {
+    curGeo: null,
+    curNet: null,
+    curTime: null,
+    lastCovGeo: null,
+    lastCovNet: null
+  },
+  
+  initDisplay: function() {
+    app.display.curGeo = document.getElementById('curGeo');
+    app.display.curNet = document.getElementById('curNet');
+    app.display.curTime = document.getElementById('curTime');
+    app.display.lastCovGeo = document.getElementById('lastCovGeo');
+    app.display.lastCovNet = document.getElementById('lastCovNet');
+    app.dispWatch = window.setInterval(app.updateDisplay, 1000);
+  },
+  
+  updateDisplay: function() {
+    var ls = window.localStorage;
+    
+    app.display.curGeo.innerHtml = app.formatGeo(app.geoLast);
+    app.display.curNet.innerHtml = app.hasCoverage(app.netLast);
+    app.display.curTime.innerHtml = new Date().toLocaleString();
+    
+    app.display.lastCovGeo.innerHtml = '';
+    var recordLastCovGeo = ls.getItem(keyLastCovGeo);
+    if (recordLastCovGeo !== null) {
+      var lastCovGeo = ls.getItem(recordLastCovGeo);
+      if (lastCovGeo !== null) {
+        app.display.lastCovGeo.innerHtml = app.formatGeo(lastCovGeo.geo);
+      }
+    }
+    
+    app.display.lastCovNet.innerHtml = '';
+    var recordLastCovNet = ls.getItem(keyLastCovNet);
+    if (recordLastCovNet !== null) {
+      var lastCovNet = ls.getItem(recordLastCovNet);
+      if (lastCovNet !== null) {
+        app.display.lastCovNet.innerHtml = lastCovNet.time;
+      }
+    }    
+  },
+  
+  formatGeo: function(geo) {
+    return geo.coords.latitude + ", " + geo.coords.longitude + " (" + geo.coords.accuracy + "); " + 
+           geo.coords.altitude + " (" + geo.coords.altitudeAccuracy + "); " + geo.timestamp;
   }
   
 };
