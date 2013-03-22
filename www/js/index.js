@@ -17,6 +17,8 @@
     
 */
 
+"use strict";
+
 var app = {
 
   geoWatch: null,
@@ -27,12 +29,12 @@ var app = {
   netLastTime: null,
   geoLastTime: null,
   
-  keyRoot            = 'bktrk.root',
-  keySessionID       = 'bktrk.session',
-  keyRecordCounter   = 'bktrk.records',
-  keyPrefixRecord    = 'bktrk.r', // e.g: bktrk.r00000000
-  keyLastCovGeo      = 'bktrk.lastCovGeo',
-  keyLastCovNet      = 'bktrk.lastCovNet',
+  keyRoot          : 'bktrk.root',
+  keySessionID     : 'bktrk.session',
+  keyRecordCounter : 'bktrk.records',
+  keyPrefixRecord  : 'bktrk.r', // e.g: bktrk.r00000000
+  keyLastCovGeo    : 'bktrk.lastCovGeo',
+  keyLastCovNet    : 'bktrk.lastCovNet',
   
   options: {
     geo: {
@@ -129,6 +131,13 @@ var app = {
   dispWatch: null,
   
   display: {
+    // map
+    // compass
+    compass: null,
+    direction: null,
+    distance: null,
+    // status
+    status: null,
     curGeo: null,
     curNet: null,
     curTime: null,
@@ -137,6 +146,10 @@ var app = {
   },
   
   initDisplay: function() {
+    app.display.compass = document.getElementById('compass');
+    app.display.direction = document.getElementById('direction');
+    app.display.distance = document.getElementById('distance');
+    app.display.status = document.getElementById('status');
     app.display.curGeo = document.getElementById('curGeo');
     app.display.curNet = document.getElementById('curNet');
     app.display.curTime = document.getElementById('curTime');
@@ -148,6 +161,7 @@ var app = {
   updateDisplay: function() {
     var ls = window.localStorage;
     
+    // update the status page
     app.display.curGeo.innerHtml = app.formatGeo(app.geoLast);
     app.display.curNet.innerHtml = app.hasCoverage(app.netLast);
     app.display.curTime.innerHtml = new Date().toLocaleString();
@@ -168,7 +182,12 @@ var app = {
       if (lastCovNet !== null) {
         app.display.lastCovNet.innerHtml = lastCovNet.time;
       }
-    }    
+    }
+
+    // update the compass page
+    
+    // update the map page
+    
   },
   
   formatGeo: function(geo) {
