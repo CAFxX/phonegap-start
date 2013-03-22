@@ -44,12 +44,14 @@ var app = {
     },
     net: {
       interval: 5000
+    },
+    cmp: {
+      interval: 100
     }
   },
   
   start: function() {
     document.addEventListener('deviceready', app.deviceReady, false);
-    app.initStorage();
   },
   
   initStorage: function() {
@@ -62,9 +64,11 @@ var app = {
   },
   
   deviceReady: function() {
+    app.initStorage();
     document.addEventListener(app.eventRecord, app.storeRecord, false);
     app.geoWatch = navigator.geolocation.watchPosition(app.geoSuccess, app.geoError, app.options.geo);
     app.netWatch = window.setInterval(app.netTimer, app.options.net.interval);
+    app.cmpWatch = navigator.compass.watchHeading(app.cmpSuccess, app.cmpError, app.options.cmp);
   },
   
   hasCoverage: function(connType) {
@@ -83,6 +87,13 @@ var app = {
   netTimer: function() {
     app.storeRecord(null, navigator.connection.type);
     app.updateDisplay();
+  },
+  
+  cmpSuccess: function() {
+  },
+  
+  cmpError: function() {
+    return; // do nothing...
   },
   
   getRecordKey: function(ID) {

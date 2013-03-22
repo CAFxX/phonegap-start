@@ -26,18 +26,23 @@
     <title>Backtrack</title>
   </head>
   <body class="compass">
-    <div id="map">
+    <div id="menu">
+      <a href="#map">Trace</a>
+      <a href="#compass">Compass</a>
+      <a href="#status">Status</a>
     </div>
-    <div id="compass">
+    <div id="map" class="page">
+    </div>
+    <div id="compass" class="page">
       <img id="direction" src="img/compass.png" alt="compass" />
       <div id="distance">← 2129m<br>↓ 421m</div>
     </div>
-    <div id="status">
-      <div id="curGeo"></div>
-      <div id="curNet"></div>
-      <div id="curTime"></div>
-      <div id="lastCovGeo"></div>
-      <div id="lastCovNet"></div>
+    <div id="status" class="page">
+      <div>Current location <div id="curGeo">XXX</div></div>
+      <div>Current coverage <div id="curNet">XXX</div></div>
+      <div>Current time <div id="curTime">XXX</div></div>
+      <div>Last known coverage location <div id="lastCovGeo">XXX</div></div>
+      <div>Last known coverage time <div id="lastCovNet">XXX</div></div>
     </div>
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
